@@ -32,7 +32,7 @@ public class CradleKeyHandler {
 
         if (event.getKey() == CradleKeyBindings.SACRED_ARTS.getKey().getValue()) {
             if (MINECRAFT.screen == null) {
-                //MINECRAFT.setScreen(new SacredArtsScreen(ClientCradleDataHandler.getSacredArts())); disable until it's ACTUALLY WORKING GOD DANG
+                MINECRAFT.setScreen(new SacredArtsScreen(ClientCradleDataHandler.getSacredArts()));
             }
         }
     }

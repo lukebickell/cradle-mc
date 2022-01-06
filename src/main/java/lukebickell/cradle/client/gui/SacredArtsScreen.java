@@ -1,5 +1,6 @@
 package lukebickell.cradle.client.gui;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lukebickell.cradle.client.ClientSacredArts;
@@ -55,8 +56,8 @@ public class SacredArtsScreen extends Screen implements ClientSacredArts.Listene
         int i = (this.width - 252) / 2;
         int j = (this.height - 140) / 2;
         this.renderBackground(poseStack);
-        SacredArtsCoreWidget.renderCoreRepresentation(poseStack, mouseX, mouseY);
         super.render(poseStack, mouseX, mouseY, partialTicks);
+        SacredArtsCoreWidget.render3Dcore(mouseX, mouseY);
     }
 
     public void onUpdateSacredArts(int coreSize, SacredArtsRank rank) {
