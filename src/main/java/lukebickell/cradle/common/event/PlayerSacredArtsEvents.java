@@ -2,8 +2,8 @@ package lukebickell.cradle.common.event;
 
 import lukebickell.cradle.Cradle;
 import lukebickell.cradle.common.capability.SacredArtsCapability;
-import lukebickell.cradle.common.network.ClientPlayerSacredArtsPacket;
 import lukebickell.cradle.common.network.PacketHandler;
+import lukebickell.cradle.common.network.packet.ClientBoundUpdateSacredArtsPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
@@ -46,7 +46,7 @@ public class PlayerSacredArtsEvents {
             player.getCapability(SacredArtsCapability.INSTANCE, null).ifPresent(sacredArts -> {
                 PacketHandler.INSTANCE.send(
                     PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                    new ClientPlayerSacredArtsPacket(sacredArts.serializeNBT())
+                    new ClientBoundUpdateSacredArtsPacket(sacredArts.serializeNBT())
                 );
             });
         }

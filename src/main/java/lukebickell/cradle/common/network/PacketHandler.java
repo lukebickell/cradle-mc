@@ -1,6 +1,7 @@
 package lukebickell.cradle.common.network;
 
 import lukebickell.cradle.Cradle;
+import lukebickell.cradle.common.network.packet.ClientBoundUpdateSacredArtsPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -29,10 +30,10 @@ public class PacketHandler {
                 .consumer(CyclingPacketUpdate::handle)
                 .add();
 
-        INSTANCE.messageBuilder(ClientPlayerSacredArtsPacket.class, nextID(), NetworkDirection.PLAY_TO_CLIENT)
-                .encoder(ClientPlayerSacredArtsPacket::encode)
-                .decoder(ClientPlayerSacredArtsPacket::new)
-                .consumer(ClientPlayerSacredArtsPacket::handle)
+        INSTANCE.messageBuilder(ClientBoundUpdateSacredArtsPacket.class, nextID(), NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ClientBoundUpdateSacredArtsPacket::encode)
+                .decoder(ClientBoundUpdateSacredArtsPacket::new)
+                .consumer(ClientBoundUpdateSacredArtsPacket::handle)
                 .add();
     }
 }

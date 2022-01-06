@@ -18,10 +18,11 @@ public class CradleKeyBindings {
     private static final String CATEGORY = "key.category.cradle.general";
 
     public static final KeyMapping CYCLE_MADRA = new KeyMapping("key.cradle.cycle_madra", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORY);
-
+    public static final KeyMapping SACRED_ARTS = new KeyMapping("key.cradle.sacred_arts", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORY);
 
     @SubscribeEvent
     public static void registerKeyMappings(final FMLClientSetupEvent event) {
         ClientRegistry.registerKeyBinding(CYCLE_MADRA);
+        ClientRegistry.registerKeyBinding(SACRED_ARTS);
     }
 }
