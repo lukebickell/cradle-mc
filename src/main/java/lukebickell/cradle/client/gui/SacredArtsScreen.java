@@ -1,21 +1,13 @@
 package lukebickell.cradle.client.gui;
 
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import lukebickell.cradle.client.ClientSacredArts;
 import lukebickell.cradle.client.keymappings.CradleKeyBindings;
 import lukebickell.cradle.common.ranks.SacredArtsRank;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.advancements.AdvancementTab;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.level.block.Blocks;
 
 public class SacredArtsScreen extends Screen implements ClientSacredArts.Listener {
     private static final ResourceLocation WINDOW_LOCATION = new ResourceLocation("textures/gui/advancements/window.png");
@@ -53,11 +45,11 @@ public class SacredArtsScreen extends Screen implements ClientSacredArts.Listene
 
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        int i = (this.width - 252) / 2;
-        int j = (this.height - 140) / 2;
+        int i = (this.width - WINDOW_WIDTH) / 2;
+        int j = (this.height - WINDOW_HEIGHT) / 2;
         this.renderBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTicks);
-        SacredArtsCoreWidget.render3Dcore(mouseX, mouseY);
+        SacredArtsCoreWidget.render3DCore(Blocks.STONE);
     }
 
     public void onUpdateSacredArts(int coreSize, SacredArtsRank rank) {
