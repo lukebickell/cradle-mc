@@ -5,22 +5,21 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jline.utils.Log;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-public class CyclingPacketUpdate {
+public class ServerBoundUpdateCyclingPacket {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public float cyclingGameScore;
 
-    public CyclingPacketUpdate(float cyclingGameScore) {
+    public ServerBoundUpdateCyclingPacket(float cyclingGameScore) {
         this.cyclingGameScore = cyclingGameScore;
     }
 
     // Decode
-    public CyclingPacketUpdate(FriendlyByteBuf buffer) {
+    public ServerBoundUpdateCyclingPacket(FriendlyByteBuf buffer) {
         this(buffer.readFloat());
     }
 

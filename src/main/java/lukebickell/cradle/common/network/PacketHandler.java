@@ -24,10 +24,10 @@ public class PacketHandler {
                 PROTOCOL_VERSION::equals,
                 PROTOCOL_VERSION::equals);
 
-        INSTANCE.messageBuilder(CyclingPacketUpdate.class, nextID(), NetworkDirection.PLAY_TO_SERVER)
-                .encoder(CyclingPacketUpdate::encode)
-                .decoder(CyclingPacketUpdate::new)
-                .consumer(CyclingPacketUpdate::handle)
+        INSTANCE.messageBuilder(ServerBoundUpdateCyclingPacket.class, nextID(), NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ServerBoundUpdateCyclingPacket::encode)
+                .decoder(ServerBoundUpdateCyclingPacket::new)
+                .consumer(ServerBoundUpdateCyclingPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(ClientBoundUpdateSacredArtsPacket.class, nextID(), NetworkDirection.PLAY_TO_CLIENT)

@@ -4,7 +4,7 @@ import lukebickell.cradle.Cradle;
 import lukebickell.cradle.client.gui.SacredArtsScreen;
 import lukebickell.cradle.client.network.ClientCradleDataHandler;
 import lukebickell.cradle.common.network.PacketHandler;
-import lukebickell.cradle.common.network.CyclingPacketUpdate;
+import lukebickell.cradle.common.network.ServerBoundUpdateCyclingPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -20,7 +20,7 @@ public class CradleKeyHandler {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         // TODO, check if player is moving
         if (CradleKeyBindings.CYCLE_MADRA.isDown()) {
-            PacketHandler.INSTANCE.sendToServer(new CyclingPacketUpdate(0.5F));
+            PacketHandler.INSTANCE.sendToServer(new ServerBoundUpdateCyclingPacket(0.5F));
         }
     }
 
