@@ -14,8 +14,12 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemStack;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class SacredArtsCoreWidget extends GuiComponent {
+
+    private final int MAX_SIZE_SCALE = 24;
+    private final int MIN_SIZE_SCALE = 12;
 
     private Block coreBlock;
 
@@ -23,7 +27,7 @@ public class SacredArtsCoreWidget extends GuiComponent {
         this.coreBlock = block;
     }
 
-    public void draw(int x, int y, int scale, Speed rotationSpeed) {
+    public void draw(int x, int y, float percentMadraFull, Speed rotationSpeed) {
         int xBlockCenter = x;
         int yBlockCenter = y;
 
@@ -32,24 +36,24 @@ public class SacredArtsCoreWidget extends GuiComponent {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         PoseStack poseStack = RenderSystem.getModelViewStack();
         poseStack.pushPose();
-        poseStack.translate(xBlockCenter, yBlockCenter, 50.0F);
+        poseStack.translate(xBlockCenter, yBlockCenter, -50);
         poseStack.scale(1.0F, -1.0F, 1.0F);
         RenderSystem.applyModelViewMatrix();
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 
         PoseStack blockPoseStack = new PoseStack();
         blockPoseStack.pushPose();
         applyTimedRotation(blockPoseStack, rotationSpeed);
-        blockPoseStack.scale(scale, scale, scale);
-        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        float coreScale = calculatePercentageScale(percentMadraFull);
+        blockPoseStack.scale(coreScale, coreScale, coreScale);
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(
-                new ItemStack(this.coreBlock),
-                ItemTransforms.TransformType.FIXED,
-                15728880,
-                OverlayTexture.NO_OVERLAY,
-                blockPoseStack,
-                bufferSource,
-                0);
+        this.renderBlock(new ItemStack(this.coreBlock), blockPoseStack, bufferSource);
+
+        PoseStack glassPoseStack = new PoseStack();
+        glassPoseStack.pushPose();
+        applyTimedRotation(glassPoseStack, rotationSpeed);
+        glassPoseStack.scale(MAX_SIZE_SCALE, MAX_SIZE_SCALE, MAX_SIZE_SCALE);
+        this.renderBlock(new ItemStack(Blocks.GLASS), glassPoseStack, bufferSource);
 
         bufferSource.endBatch();
         RenderSystem.enableDepthTest();
@@ -59,7 +63,29 @@ public class SacredArtsCoreWidget extends GuiComponent {
         RenderSystem.applyModelViewMatrix();
     }
 
-    private static void applyTimedRotation(PoseStack poseStack, Speed rotationSpeed) {
+    // Returns value between MIN_SIZE_SCALE and MAX_SIZE_SCALE based on currentMadra/maxMadra
+    private float calculatePercentageScale(float percentMaxMadra) {
+        if (percentMaxMadra <= 0) {
+            return MIN_SIZE_SCALE;
+        } else if (percentMaxMadra >= 1) {
+            return MAX_SIZE_SCALE + 0.5f;
+        }
+        int minMaxDiff = MAX_SIZE_SCALE - MIN_SIZE_SCALE;
+        return MIN_SIZE_SCALE + (minMaxDiff * percentMaxMadra);
+    }
+
+    private void renderBlock(ItemStack block, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
+        Minecraft.getInstance().getItemRenderer().renderStatic(
+                block,
+                ItemTransforms.TransformType.FIXED,
+                15728880,
+                OverlayTexture.NO_OVERLAY,
+                poseStack,
+                bufferSource,
+                0);
+    }
+
+    private void applyTimedRotation(PoseStack poseStack, Speed rotationSpeed) {
         float angle = (System.currentTimeMillis() / rotationSpeed.value) % 360;
         Quaternion rotationX = Vector3f.XP.rotationDegrees(angle);
         Quaternion rotationY = Vector3f.YP.rotationDegrees(angle);
@@ -68,7 +94,7 @@ public class SacredArtsCoreWidget extends GuiComponent {
         poseStack.mulPose(rotationY);
     }
 
-    public static enum Speed {
+    public enum Speed {
         SLOW(50),
         FAST(15),
         FASTER(5);

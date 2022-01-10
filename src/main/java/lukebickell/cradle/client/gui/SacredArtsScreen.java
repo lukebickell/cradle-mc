@@ -83,7 +83,7 @@ public class SacredArtsScreen extends Screen implements ClientSacredArts.Listene
         this.font.draw(poseStack, TITLE, (float)(x + 8), (float)(y + 6), 4210752);
     }
 
-    public void onUpdateSacredArts(int coreSize, SacredArtsRank rank) {
+    public void onUpdateSacredArts(double maxMadra, double currentMadra, SacredArtsRank rank) {
         
     }
 }

@@ -19,7 +19,7 @@ public class ClientBoundUpdateSacredArtsPacket {
     }
 
     public ClientBoundUpdateSacredArtsPacket(FriendlyByteBuf buffer) {
-        this(buffer.readAnySizeNbt());
+        this(buffer.readNbt());
     }
 
     public void encode(FriendlyByteBuf buffer) {

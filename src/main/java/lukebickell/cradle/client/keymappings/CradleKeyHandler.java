@@ -4,7 +4,8 @@ import lukebickell.cradle.Cradle;
 import lukebickell.cradle.client.gui.SacredArtsScreen;
 import lukebickell.cradle.client.network.ClientCradleDataHandler;
 import lukebickell.cradle.common.network.PacketHandler;
-import lukebickell.cradle.common.network.ServerBoundUpdateCyclingPacket;
+import lukebickell.cradle.common.network.packet.ServerBoundRankAdvancePacket;
+import lukebickell.cradle.common.network.packet.ServerBoundUpdateCyclingPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -31,8 +32,11 @@ public class CradleKeyHandler {
         }
 
         if (event.getKey() == CradleKeyBindings.SACRED_ARTS.getKey().getValue()) {
-            if (MINECRAFT.screen == null) {
-                MINECRAFT.setScreen(new SacredArtsScreen(ClientCradleDataHandler.getSacredArts()));
+//            if (MINECRAFT.screen == null) {
+//                MINECRAFT.setScreen(new SacredArtsScreen(ClientCradleDataHandler.getSacredArts()));
+//            }
+            if (ClientCradleDataHandler.getSacredArts().canRankUp()) {
+                PacketHandler.INSTANCE.sendToServer(new ServerBoundRankAdvancePacket());
             }
         }
     }

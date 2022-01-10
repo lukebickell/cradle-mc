@@ -6,9 +6,10 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface ISacredArts extends INBTSerializable<CompoundTag> {
 
-    public int getCoreSize();
-    public void setCoreSize(int size);
-    public void addOrSubtractToCore(int amount);
+    public double getMaxMadra();
+    public double getCurrentMadra();
+    public void advanceToNextRank();
+    public void addOrSubtractToMadra(double amount);
 
     public SacredArtsRank getRank();
     public void setRank(SacredArtsRank rank);

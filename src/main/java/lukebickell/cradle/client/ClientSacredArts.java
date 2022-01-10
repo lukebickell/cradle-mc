@@ -1,15 +1,15 @@
 package lukebickell.cradle.client;
 
-import lukebickell.cradle.common.capability.SacredArtsImpl;
 import lukebickell.cradle.common.network.packet.ClientBoundUpdateSacredArtsPacket;
 import lukebickell.cradle.common.ranks.SacredArtsRank;
 import org.jetbrains.annotations.Nullable;
 
-import static lukebickell.cradle.common.capability.SacredArtsImpl.NBT_KEY_CRADLE_SPIRIT_CORE_SIZE;
+import static lukebickell.cradle.common.constants.SacredArtsContstants.*;
 
 public class ClientSacredArts {
 
-    private int coreSize = 0;
+    private double maxMadra = INITIAL_MAX_MADRA;
+    private double currentMadra = 0;
     private SacredArtsRank rank = SacredArtsRank.FOUNDATION;
 
     @Nullable
@@ -18,35 +18,36 @@ public class ClientSacredArts {
     public ClientSacredArts() {}
 
     public void update(ClientBoundUpdateSacredArtsPacket packet) {
-        this.coreSize = packet.sacredArts.getInt(NBT_KEY_CRADLE_SPIRIT_CORE_SIZE);
-        this.rank = SacredArtsRank.valueOf(packet.sacredArts.getString(SacredArtsImpl.NBT_KEY_CRADLE_SPIRIT_RANK));
+        this.currentMadra = packet.sacredArts.getDouble(NBT_KEY_CRADLE_SPIRIT_CURRENT_MADRA);
+        this.maxMadra = packet.sacredArts.getDouble(NBT_KEY_CRADLE_SPIRIT_MAX_MADRA);
+        this.rank = SacredArtsRank.valueOf(packet.sacredArts.getString(NBT_KEY_CRADLE_SPIRIT_RANK));
 
         if (this.listener != null) {
-            this.listener.onUpdateSacredArts(this.coreSize, this.rank);
+            this.listener.onUpdateSacredArts(this.maxMadra, this.currentMadra, this.rank);
         }
-    }
-
-    public int getCoreSize() {
-        return this.coreSize;
     }
 
     public SacredArtsRank getRank() {
         return this.rank;
     }
 
-    public String getRankName() {
-        return this.rank.name();
+    public boolean canRankUp() {
+        return this.currentMadra == this.maxMadra;
+    }
+
+    public float getPercentMadraFull() {
+        return (float) (this.currentMadra / this.maxMadra);
     }
 
     public void setListener(ClientSacredArts.Listener listener) {
         this.listener = listener;
         if (listener != null) {
-            this.listener.onUpdateSacredArts(this.coreSize, this.rank);
+            this.listener.onUpdateSacredArts(this.maxMadra, this.currentMadra, this.rank);
         }
     }
 
     public interface Listener {
-        void onUpdateSacredArts(int coreSize, SacredArtsRank rank);
+        void onUpdateSacredArts(double maxMadra, double currentMadra, SacredArtsRank rank);
     }
 
 }

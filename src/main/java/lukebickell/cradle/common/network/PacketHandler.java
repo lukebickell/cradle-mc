@@ -1,10 +1,16 @@
 package lukebickell.cradle.common.network;
 
 import lukebickell.cradle.Cradle;
+import lukebickell.cradle.common.capability.ISacredArts;
+import lukebickell.cradle.common.capability.SacredArtsCapability;
 import lukebickell.cradle.common.network.packet.ClientBoundUpdateSacredArtsPacket;
+import lukebickell.cradle.common.network.packet.ServerBoundRankAdvancePacket;
+import lukebickell.cradle.common.network.packet.ServerBoundUpdateCyclingPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PacketHandler {
@@ -35,5 +41,18 @@ public class PacketHandler {
                 .decoder(ClientBoundUpdateSacredArtsPacket::new)
                 .consumer(ClientBoundUpdateSacredArtsPacket::handle)
                 .add();
+
+        INSTANCE.messageBuilder(ServerBoundRankAdvancePacket.class, nextID(), NetworkDirection.PLAY_TO_SERVER)
+                .encoder(ServerBoundRankAdvancePacket::encode)
+                .decoder(ServerBoundRankAdvancePacket::new)
+                .consumer(ServerBoundRankAdvancePacket::handle)
+                .add();
+    }
+
+    public static void updateClientSacredArts(ServerPlayer player, ISacredArts sacredArts) {
+        INSTANCE.send(
+                PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+                new ClientBoundUpdateSacredArtsPacket(sacredArts.serializeNBT())
+        );
     }
 }

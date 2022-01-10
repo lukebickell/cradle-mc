@@ -1,4 +1,4 @@
-package lukebickell.cradle.common.network;
+package lukebickell.cradle.common.network.packet;
 
 import lukebickell.cradle.common.capability.SacredArtsCapability;
 import net.minecraft.network.FriendlyByteBuf;
@@ -31,13 +31,12 @@ public class ServerBoundUpdateCyclingPacket {
         final var success = new AtomicBoolean(false);
         ctx.get().enqueueWork(() -> {
             ctx.get().getSender().getCapability(SacredArtsCapability.INSTANCE, null).ifPresent(spirit -> {
-                spirit.addOrSubtractToCore(Math.round(cyclingGameScore * 100));
-                LOGGER.info(spirit.getCoreSize() + ": Successfully added " + Math.round(cyclingGameScore * 100) + " spirit to player " + ctx.get().getSender().getName().getContents());
+                spirit.addOrSubtractToMadra(Math.round(cyclingGameScore));
+                LOGGER.info(spirit.getCurrentMadra() + ": Successfully added " + Math.round(cyclingGameScore) + " spirit to player " + ctx.get().getSender().getName().getContents());
                 success.set(true);
             });
         });
         ctx.get().setPacketHandled(true);
         return success.get();
     }
-
 }

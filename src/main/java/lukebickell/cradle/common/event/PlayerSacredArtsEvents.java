@@ -44,10 +44,7 @@ public class PlayerSacredArtsEvents {
     public static void syncPlayerSacredArts(Player player) {
         if (player instanceof ServerPlayer) {
             player.getCapability(SacredArtsCapability.INSTANCE, null).ifPresent(sacredArts -> {
-                PacketHandler.INSTANCE.send(
-                    PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                    new ClientBoundUpdateSacredArtsPacket(sacredArts.serializeNBT())
-                );
+                PacketHandler.updateClientSacredArts((ServerPlayer) player, sacredArts);
             });
         }
     }
